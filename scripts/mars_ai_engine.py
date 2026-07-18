@@ -153,53 +153,95 @@ Return ONLY the JSON object, no other text."""
     return normalize_question_data(parse_json_response(response))
 
 
+VERIFIED_FACTS_CONSTRAINTS = """
+CRITICAL VERIFIED FACTS — You MUST only use these verified facts. Do NOT fabricate any citation, value, or instrument capability.
+
+## INSTRUMENT CAPABILITIES (verified):
+- Viking Landers 1 & 2: meteorological sensors (temperature, wind, pressure), cameras. NO electric field measurement capability.
+- InSight lander: SEIS (seismometer), HP3 (heat probe), RISE (radio science), IFG (magnetometer - measures MAGNETIC field, NOT electric field), TWINS (temp/wind), PS (pressure). NO electric field sensor. InSight is NOT "Mars Science Laboratory" (MSL is Curiosity).
+- MRO CRISM: visible/near-infrared spectrometer for HYDRATED MINERALS. Does NOT detect perchlorates directly.
+- MRO HiRISE: high-resolution camera. Dust devil counts are in the thousands, NOT hundreds of thousands.
+- Mars Express HRSC: stereo camera for 3D imaging. CANNOT measure electric fields.
+- Mars Express MARSIS: subsurface radar. The 2018 subglacial lake discovery was at the SOUTH POLE (Planum Australe / Ultimi Scopuli region), NOT Utopia Planitia. Published by Orosei et al. 2018 in Science.
+- Mars Express OMEGA: mineral mapping spectrometer.
+- MAVEN: studies Mars UPPER ATMOSPHERE and ionosphere (>150 km altitude), atmospheric escape. Does NOT measure surface dust devil temperatures.
+- Phoenix lander WCL (Wet Chemistry Lab): FIRST confirmed detection of perchlorates on Mars (2008/2009, Hecht et al. 2009, Science), at Vastitas Borealis, ~0.4-0.6 wt%.
+- Curiosity SAM: detects organics via pyrolysis-GC-MS. Perchlorates detected indirectly via O2 release and chlorinated compounds.
+- Perseverance SHERLOC: detects organics via fluorescence/Raman. SHERLOC results published in Sharma et al. 2023 (Nature). PAH detection in sulfates reported at LPSC 2026.
+
+## VERIFIED ORGANIC DETECTIONS:
+- Chlorobenzene: detected by Curiosity SAM at CUMBERLAND drill hole, Sheepbed Mudstone. Published by Freissinet et al. 2015 (JGR-Planets). Concentration: approximately 150-300 ppbw. Eigenbrode et al. 2018 (Science) reported thiophenes, aromatics, aliphatics in Murray Formation — NOT chlorobenzene.
+- Perseverance Wildcat Ridge (2022): NASA reported significant organics but did NOT report specific ppb PAH concentration.
+
+## CITATION RULES (CRITICAL):
+- ONLY cite publications you are confident are REAL. Verified: Hecht et al. 2009 (Science); Eigenbrode et al. 2018 (Science); Freissinet et al. 2015 (JGR); Steele et al. 2018 (Science Advances); Orosei et al. 2018 (Science); Atreya et al. 2006 (Astrobiology); Navarro-Gonzalez et al. 2010.
+- Do NOT invent citations with author names + years. Do NOT attribute studies to IGG CAS unless certain.
+- When stating quantitative values, qualify with "approximately" or "reported as". If exact value uncertain, give a range.
+- No electric field has EVER been directly measured on Mars surface.
+"""
+
+
 def generate_report(question):
-    """Generate a detailed scientific research report answering the question."""
-    prompt = f"""You are a leading Mars scientist writing a rigorous, evidence-based research report.
+    """Generate a rigorous, factually-accurate scientific research report answering the question."""
+    prompt = f"""You are a LEADING Mars planetary scientist writing a research report for a top-tier journal (e.g., Nature Geoscience). Scientific RIGOR and FACTUAL ACCURACY are paramount. Every claim must be verifiable. You must NOT fabricate citations, data, or instrument capabilities.
 
 QUESTION UNDER INVESTIGATION:
 Title: {question['title']}
 Category: {question['category']}
-Rationale: {question['rationale']}
-Hypothesis: {question['hypothesis']}
+Rationale: {question.get('rationale', '')}
+Hypothesis: {question.get('hypothesis', '')}
 
-Draw on data and findings from these authoritative sources:
-- NASA Mars Science: rover missions (Curiosity, Perseverance, Spirit, Opportunity), orbiters (MGS, MRO, MAVEN, Odyssey), landers (InSight, Viking). URL: https://science.nasa.gov/mars/
-- ESA Mars Express: HRSC imaging, MARSIS subsurface radar, OMEGA mineral mapping, atmospheric science. URL: https://www.esa.int/Science_Exploration/Space_Science/Mars_Express
-- The Mars Society: analog research, human exploration advocacy. URL: https://www.marssociety.org/
-- IGG CAS (Institute of Geology and Geophysics, Chinese Academy of Sciences): Mars geology, water activity, magnetism, climatology. URL: http://www.igg.cas.cn/Mars/
+{VERIFIED_FACTS_CONSTRAINTS}
 
-Write a COMPREHENSIVE scientific research report with the following sections. Be detailed, cite specific data/findings, and maintain scientific rigor. Use Markdown formatting.
+AUTHORITATIVE DATA SOURCES to reference (use their general findings, do not fabricate specific paper titles unless verified):
+- NASA Mars Science (https://science.nasa.gov/mars/): Curiosity, Perseverance, Spirit, Opportunity, InSight, MAVEN, MRO, Odyssey, Viking missions.
+- ESA Mars Express (https://www.esa.int/Science_Exploration/Space_Science/Mars_Express): HRSC, MARSIS, OMEGA instruments.
+- The Mars Society (https://www.marssociety.org/): analog research, Marspedia, human exploration advocacy.
+- IGG CAS (http://www.igg.cas.cn/Mars/): Mars geology, mineralogy, water activity, magnetism research. Reference their general research areas without fabricating specific paper citations.
+
+Write a COMPREHENSIVE, scientifically rigorous research report. Structure:
 
 ## Abstract
-A 4-5 sentence summary of the investigation and key findings.
+4-5 sentences summarizing the investigation and findings. Be precise about confidence levels.
 
 ## 1. Introduction
-Background context, why this question matters, and the state of current knowledge.
+Background, why this question matters, current state of knowledge. Reference VERIFIED findings only.
 
 ## 2. Methodology
-The analytical approach, data sources consulted, and reasoning framework.
+Analytical approach, data sources, reasoning framework. Be explicit about limitations.
 
 ## 3. Evidence and Analysis
-Detailed analysis with subsections. Cite specific missions, instruments, and findings. Include quantitative data where available (dimensions, ages, compositions, pressures, temperatures).
+Detailed analysis with subsections. For EACH piece of evidence:
+- State the SOURCE (mission/instrument or publication)
+- Give VERIFIED quantitative data (with "approximately" if uncertain)
+- Acknowledge uncertainties explicitly
+- Do NOT state values you cannot verify. Use qualitative language when exact numbers are uncertain.
 
 ## 4. Synthesis
-Integrate the evidence into a coherent answer to the question.
+Integrate evidence into a coherent answer. Distinguish what is well-established from what is speculative.
 
 ## 5. Implications
-What this means for Mars science, comparative planetology, and future exploration.
+What this means for Mars science, comparative planetology, future exploration. Be measured.
 
 ## 6. Open Questions
-New questions that emerge from this investigation.
+Genuinely novel follow-up questions that emerge.
 
 ## 7. References
-List the key sources and mission data referenced (format: Source Name - URL or Mission/Instrument).
+List ONLY verified sources. Include the 4 authoritative URLs. Do NOT list fabricated citations.
 
-Be scientifically precise. Use specific numbers, locations, and mission results. Length: 1500-2500 words."""
+CRITICAL RULES:
+1. NEVER fabricate a citation. If unsure a paper exists, write "studies of [topic]" instead.
+2. NEVER attribute an instrument capability it does not have.
+3. NEVER state a specific concentration/value unless verified. Use qualitative descriptions otherwise.
+4. Be HONEST about what is known vs. unknown vs. speculative.
+5. Frame novel hypotheses as hypotheses requiring investigation, not as established fact.
+6. Length: 2000-3000 words. Depth over false precision.
+
+Write the report now in Markdown."""
 
     return call_glm(
         [{"role": "user", "content": prompt}],
-        temperature=0.4,
+        temperature=0.3,
         max_tokens=8192,
     )
 
