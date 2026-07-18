@@ -1,0 +1,40 @@
+name: Mars AI Research Engine
+
+on:
+  schedule:
+    # Run daily at 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  ai-research:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run AI Research Engine
+        env:
+          GLM_API_KEY: ${{ secrets.GLM_API_KEY }}
+        run: |
+          python3 scripts/mars_ai_engine.py data daily
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "Mars AI Bot"
+          git config --global user.email "mars-ai-bot@users.noreply.github.com"
+          git add data/questions.json data/reports/
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "AI Research Update: $(date -u '+%Y-%m-%d %H:%M UTC') [skip ci]"
+            git push
+          fi

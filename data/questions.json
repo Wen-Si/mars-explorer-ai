@@ -1,0 +1,61 @@
+[
+  {
+    "id": "Q001",
+    "title": "Do Martian dust devils selectively transport and concentrate specific organic compounds in the atmosphere?",
+    "category": "Astrobiology",
+    "rationale": "This question is novel because it combines atmospheric physics, organic chemistry, and dust dynamics in a way that has not been systematically explored. Understanding dust devils as potential concentrators of organics could reveal new pathways for prebiotic chemistry on Mars.",
+    "hypothesis": "Martian dust devils act as natural filters, preferentially lifting and concentrating specific organic compounds from the surface to the atmosphere, potentially creating localized regions of enhanced organic abundance.",
+    "key_data_needed": "In-situ organic composition measurements in dust devil vortices, coupled with atmospheric dust sampling and remote sensing of dust devil activity and atmospheric chemistry.",
+    "implications": "This could revolutionize our understanding of Martian organic chemistry, provide new targets for life detection missions, and offer insights into how atmospheric processes might concentrate prebiotic molecules on other planets.",
+    "asked_date": "2026-06-21",
+    "asked_timestamp": "2026-06-21T09:37:48.388991+00:00",
+    "status": "completed",
+    "report_ready_date": "2026-06-28",
+    "report_file": "reports/Q001_report.md",
+    "report_generated": "2026-06-28T09:37:48.388991+00:00"
+  },
+  {
+    "id": "Q002",
+    "title": "Does the Martian regolith's electrostatic charging alter the stability of subsurface brines and their potential for hosting life?",
+    "category": "Geophysics",
+    "rationale": "While Martian dust charging and brine formation are studied separately, their interaction remains unexplored. This question bridges geophysics and astrobiology by examining how electrostatic forces in the regolith might control liquid water accessibility in cold, dry environments.",
+    "hypothesis": "Electrostatic charging of Martian regolith particles destabilizes subsurface brines by altering their ionic balance, reducing their stability and habitability potential.",
+    "key_data_needed": "In-situ measurements of regolith electrostatic potential, brine chemistry, and dielectric properties; orbital radar and magnetic field data to correlate subsurface brine distribution with dust storm activity; and modeling of electrostatic interactions in Martian regolith.",
+    "implications": "Answering this would redefine our understanding of Martian habitability, showing that electrostatic processes—not just temperature or salinity—could limit liquid water availability. This would also have broader implications for icy moons and other electrostatically active environments in the solar system.",
+    "asked_date": "2026-06-30",
+    "asked_timestamp": "2026-06-30T09:37:48.388991+00:00",
+    "status": "completed",
+    "report_ready_date": "2026-07-07",
+    "report_file": "reports/Q002_report.md",
+    "report_generated": "2026-07-07T09:37:48.388991+00:00"
+  },
+  {
+    "id": "Q003",
+    "title": "Do Martian impact craters create localized electrochemical gradients that drive redox reactions between perchlorates and organics, potentially generating detectable biosignatures?",
+    "category": "Astrobiology",
+    "rationale": "This question combines impact geology, electrochemistry, and organic chemistry to explore a previously unstudied mechanism for biosignature formation on Mars, potentially explaining the paradox of detected organics in oxidizing environments.",
+    "hypothesis": "Impact-generated shock heating and fracturing create transient redox conditions where perchlorates act as oxidants for buried organics, producing distinct chemical byproducts that could be detected by future missions.",
+    "key_data_needed": "High-resolution mineralogical mapping of crater floors/subsurface, in-situ electrochemical measurements of regolith, and organic compound detection via advanced mass spectrometry in impact-affected regions.",
+    "implications": "This could reveal a new pathway for prebiotic chemistry on Mars, inform sampling strategies for Mars Sample Return, and provide a framework for studying redox-driven processes in impact craters across the solar system.",
+    "asked_date": "2026-07-09",
+    "asked_timestamp": "2026-07-09T09:37:48.388991+00:00",
+    "status": "completed",
+    "report_ready_date": "2026-07-16",
+    "report_file": "reports/Q003_report.md",
+    "report_generated": "2026-07-16T09:37:48.388991+00:00"
+  },
+  {
+    "id": "Q004",
+    "title": "Do Mars' seasonal atmospheric CO₂ frost deposits create transient electrochemical environments at their base that facilitate the non-biological synthesis of complex organic compounds?",
+    "category": "Chemistry",
+    "rationale": "This question is novel because it links atmospheric frosting processes with surface electrochemistry and prebiotic chemistry, a connection not previously explored. It addresses how Mars' unique CO₂ cycle might drive unexpected chemical complexity in polar regions, with implications for both planetary chemistry and the potential for abiotic organic formation.",
+    "hypothesis": "Seasonal CO₂ frost formation at the Martian poles generates localized electrochemical potentials at the frost-regolith interface that catalyze the reductive amination of simple organics, leading to the formation of more complex nitrogen-bearing compounds.",
+    "key_data_needed": "In situ measurements of electrochemical potential gradients beneath seasonal frost deposits using landers or rovers, coupled with laboratory simulations of CO₂ frost-substrate interactions, and spectral analysis of polar regions for complex organics.",
+    "implications": "Answering this would revolutionize our understanding of Mars' carbon-nitrogen chemistry, reveal a new pathway for prebiotic compound formation without biological activity, and provide insights into how atmospheric processes can shape planetary geochemistry—potentially informing the search for life on other worlds.",
+    "asked_date": "2026-07-16",
+    "asked_timestamp": "2026-07-16T09:44:33.911051+00:00",
+    "status": "researching",
+    "report_ready_date": "2026-07-23",
+    "report_file": null
+  }
+]

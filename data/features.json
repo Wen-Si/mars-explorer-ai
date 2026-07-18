@@ -1,0 +1,242 @@
+[
+  {
+    "name": "Olympus Mons",
+    "type": "volcano",
+    "latitude": 18.4,
+    "longitude": 226.0,
+    "description": "The largest volcano and highest mountain in the Solar System, a shield volcano rising ~22 km above the surrounding plains with a caldera ~80 km wide. Located on the Tharsis bulge.",
+    "sources": ["NASA", "ESA Mars Express", "Mars Society", "IGG CAS"]
+  },
+  {
+    "name": "Ascraeus Mons",
+    "type": "volcano",
+    "latitude": 11.8,
+    "longitude": 255.5,
+    "description": "The northernmost and tallest of the three Tharsis Montes shield volcanoes, rising ~18 km with a complex summit caldera and long lava flows.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Pavonis Mons",
+    "type": "volcano",
+    "latitude": 0.79,
+    "longitude": 246.6,
+    "description": "The middle shield volcano of the Tharsis Montes chain, rising ~14 km above mean surface level with a large summit caldera.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Arsia Mons",
+    "type": "volcano",
+    "latitude": -8.35,
+    "longitude": 239.9,
+    "description": "The southernmost of the Tharsis Montes shield volcanoes, rising ~17.7 km; its summit caldera is the largest of the three aligned volcanoes.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Alba Mons",
+    "type": "volcano",
+    "latitude": 41.1,
+    "longitude": 249.3,
+    "description": "A vast low-profile shield volcano north of the Tharsis Montes with the largest footprint of any volcano on Mars, though only ~6.8 km in relief.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Elysium Mons",
+    "type": "volcano",
+    "latitude": 24.8,
+    "longitude": 146.9,
+    "description": "The largest volcano in the Elysium volcanic province, rising ~14 km with a ~14 km wide caldera; the second major volcanic center after Tharsis.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Valles Marineris",
+    "type": "canyon",
+    "latitude": -13.9,
+    "longitude": 300.8,
+    "description": "A vast system of tectonic canyons stretching over 4,000 km along the Martian equator, up to 7 km deep; the largest canyon in the Solar System.",
+    "sources": ["NASA", "ESA Mars Express", "Mars Society", "IGG CAS"]
+  },
+  {
+    "name": "Noctis Labyrinthus",
+    "type": "canyon",
+    "latitude": -6.0,
+    "longitude": 255.0,
+    "description": "A network of intersecting graben and troughs at the western end of Valles Marineris on the Tharsis bulge, often called Mars's 'labyrinth of night'.",
+    "sources": ["ESA Mars Express", "NASA"]
+  },
+  {
+    "name": "Hellas Planitia",
+    "type": "plain",
+    "latitude": -42.7,
+    "longitude": 70.0,
+    "description": "A huge, roughly circular impact basin in the southern hemisphere, ~2,300 km across and over 7 km deep; one of the largest impact craters in the Solar System.",
+    "sources": ["NASA", "ESA Mars Express", "Mars Society"]
+  },
+  {
+    "name": "Argyre Planitia",
+    "type": "plain",
+    "latitude": -49.7,
+    "longitude": 316.0,
+    "description": "A major impact basin ~800 km across in the southern highlands, formed ~3.9 billion years ago and once possibly holding an ancient lake.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Gale Crater",
+    "type": "crater",
+    "latitude": -5.4,
+    "longitude": 137.8,
+    "description": "A 154 km diameter impact crater hosting Aeolis Mons (Mount Sharp), explored by NASA's Curiosity rover to assess ancient habitability.",
+    "sources": ["NASA", "IGG CAS"]
+  },
+  {
+    "name": "Jezero Crater",
+    "type": "crater",
+    "latitude": 18.4,
+    "longitude": 77.7,
+    "description": "A ~45 km crater on the western edge of Isidis Planitia containing a fossil river delta; the landing site of NASA's Perseverance rover.",
+    "sources": ["NASA", "ESA Mars Express"]
+  },
+  {
+    "name": "Gusev Crater",
+    "type": "crater",
+    "latitude": -14.5,
+    "longitude": 175.4,
+    "description": "A ~166 km crater that once held a lake fed by Ma'adim Vallis; landing site of NASA's Spirit rover.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Endeavour Crater",
+    "type": "crater",
+    "latitude": -2.3,
+    "longitude": 354.8,
+    "description": "A ~22 km Noachian-aged crater in Meridiani Planum whose rim contains phyllosilicates; explored by NASA's Opportunity rover.",
+    "sources": ["NASA"]
+  },
+  {
+    "name": "Victoria Crater",
+    "type": "crater",
+    "latitude": -2.05,
+    "longitude": 354.5,
+    "description": "A ~750 m diameter impact crater in Meridiani Planum visited and imaged by NASA's Opportunity rover.",
+    "sources": ["NASA"]
+  },
+  {
+    "name": "Utopia Planitia",
+    "type": "plain",
+    "latitude": 47.6,
+    "longitude": 134.3,
+    "description": "A large lowland plain in the northern hemisphere and the Viking 2 lander site; IGG CAS studies report mineralogical evidence of water activity here.",
+    "sources": ["NASA", "ESA Mars Express", "IGG CAS"]
+  },
+  {
+    "name": "Acidalia Planitia",
+    "type": "plain",
+    "latitude": 49.8,
+    "longitude": 339.3,
+    "description": "A plain in the northern lowlands between Tharsis and Arabia Terra, containing the famous Cydonia region and the Viking 1 landing area nearby.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Medusae Fossae Formation",
+    "type": "region",
+    "latitude": 0.0,
+    "longitude": 185.0,
+    "description": "An extensive, enigmatic wind-scoured deposit straddling the equator between Tharsis and Elysium, possibly of volcanic ash origin.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Mareotis Fossae",
+    "type": "region",
+    "latitude": 44.0,
+    "longitude": 284.7,
+    "description": "A group of troughs (fossae) ~1,860 km long in the Arcadia quadrangle of the northern hemisphere, named after a classical albedo feature.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Kasei Valles",
+    "type": "canyon",
+    "latitude": 24.4,
+    "longitude": 295.0,
+    "description": "One of the largest outflow channel systems on Mars, ~1,780 km long, carved by ancient catastrophic floods north of Valles Marineris.",
+    "sources": ["NASA", "ESA Mars Express"]
+  },
+  {
+    "name": "Ares Vallis",
+    "type": "canyon",
+    "latitude": 10.3,
+    "longitude": 334.2,
+    "description": "A major outflow channel ~1,700 km long leading from Argyre into Chryse Planitia; the Mars Pathfinder landing site lies near its mouth.",
+    "sources": ["NASA", "ESA Mars Express"]
+  },
+  {
+    "name": "Ma'adim Vallis",
+    "type": "canyon",
+    "latitude": -21.6,
+    "longitude": 177.3,
+    "description": "A ~700 km long outflow channel draining south highland lakes northward into Gusev crater, over 20 km wide and 2 km deep in places.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Naktong Vallis",
+    "type": "canyon",
+    "latitude": 5.3,
+    "longitude": 32.9,
+    "description": "An ancient river valley ~494 km long in the Arabia quadrangle, named after a river in Korea, carved by past flowing water.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Shalbatana Vallis",
+    "type": "canyon",
+    "latitude": 7.8,
+    "longitude": 317.9,
+    "description": "An ancient outflow channel over 1,300 km long in Xanthe Terra, the westernmost of the southern Chryse outflow channels, imaged in detail by ESA's HRSC.",
+    "sources": ["ESA Mars Express", "NASA"]
+  },
+  {
+    "name": "Meridiani Planum",
+    "type": "plain",
+    "latitude": -0.03,
+    "longitude": 356.9,
+    "description": "An equatorial plain rich in hematite and layered sedimentary rocks; landing site of NASA's Opportunity rover, defining Mars's prime meridian region.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Arabia Terra",
+    "type": "region",
+    "latitude": 19.8,
+    "longitude": 30.0,
+    "description": "A vast, densely cratered upland region of Noachian terrain spanning ~4,500 km, marking the boundary between northern lowlands and southern highlands.",
+    "sources": ["NASA", "Mars Society"]
+  },
+  {
+    "name": "Terra Cimmeria",
+    "type": "region",
+    "latitude": -34.7,
+    "longitude": 145.0,
+    "description": "A heavily cratered southern-highland region ~5,400 km across noted for strong crustal remanent magnetization, evidence of an ancient Martian dynamo.",
+    "sources": ["NASA", "IGG CAS", "Mars Society"]
+  },
+  {
+    "name": "Xanthe Terra",
+    "type": "region",
+    "latitude": 10.0,
+    "longitude": 310.0,
+    "description": "A rugged highland region between Lunae Planum and Chryse Planitia that hosts many of the southern Chryse outflow channels, flown over by Mars Express.",
+    "sources": ["ESA Mars Express", "NASA"]
+  },
+  {
+    "name": "North Polar Ice Cap (Planum Boreum)",
+    "type": "pole",
+    "latitude": 85.0,
+    "longitude": 0.0,
+    "description": "A permanent dome of water ice with seasonal carbon dioxide frost atop layered polar deposits, imaged in detail by ESA's Mars Express and NASA missions.",
+    "sources": ["NASA", "ESA Mars Express", "IGG CAS"]
+  },
+  {
+    "name": "South Polar Ice Cap (Planum Australe)",
+    "type": "pole",
+    "latitude": -82.0,
+    "longitude": 0.0,
+    "description": "The southern residual polar cap, dominated by carbon dioxide ice over water-ice layered deposits, which grows and shrinks dramatically with the seasons.",
+    "sources": ["NASA", "ESA Mars Express", "IGG CAS"]
+  }
+]

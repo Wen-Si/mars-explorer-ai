@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Explorer AI — Autonomous Mars Science Discovery Platform</title>
+    <meta name="description" content="An AI-powered platform that autonomously poses novel scientific questions about Mars and conducts research to answer them.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23c1440e'/><circle cx='35' cy='35' r='8' fill='%238b1a00' opacity='0.6'/><circle cx='65' cy='55' r='12' fill='%238b1a00' opacity='0.5'/></svg>">
+</head>
+<body>
+    <!-- Starfield background -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-mark">
+                <span class="logo-orbit"></span>
+                <span class="logo-dot"></span>
+            </div>
+            <div class="title-block">
+                <h1>MARS<span class="title-accent">EXPLORER</span></h1>
+                <p class="subtitle">Autonomous AI Science Discovery</p>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <button class="nav-btn active" data-view="explore">Explore</button>
+            <button class="nav-btn" data-view="research">AI Research</button>
+            <button class="nav-btn" data-view="timeline">Timeline</button>
+            <button class="nav-btn" data-view="sources">Sources</button>
+        </nav>
+        <div class="header-right">
+            <div class="status-pill" id="ai-status">
+                <span class="pulse-dot"></span>
+                <span class="status-text">GLM-4.5-Flash Active</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+        <!-- EXPLORE VIEW: 3D Mars Globe -->
+        <section class="view view-explore active" id="view-explore">
+            <div class="globe-container">
+                <div id="mars-globe"></div>
+                <div class="globe-overlay-top">
+                    <div class="globe-info">
+                        <h2 class="globe-title">Mars — The Red Planet</h2>
+                        <p class="globe-coord" id="coord-display">Drag to rotate · Scroll to zoom · Click markers</p>
+                    </div>
+                    <div class="globe-controls">
+                        <button class="ctrl-btn" id="toggle-rotation" title="Toggle auto-rotation">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                        </button>
+                        <button class="ctrl-btn" id="reset-view" title="Reset view">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="loading-screen" id="globe-loading">
+                    <div class="mars-loader"></div>
+                    <p>Rendering Mars...</p>
+                </div>
+            </div>
+
+            <!-- Feature info panel -->
+            <aside class="feature-panel" id="feature-panel">
+                <button class="panel-close" id="panel-close">&times;</button>
+                <div class="panel-content" id="panel-content">
+                    <span class="panel-type" id="panel-type"></span>
+                    <h3 id="panel-name"></h3>
+                    <div class="panel-coords" id="panel-coords"></div>
+                    <p id="panel-desc"></p>
+                    <div class="panel-sources" id="panel-sources"></div>
+                </div>
+            </aside>
+
+            <!-- Feature filter legend -->
+            <div class="legend">
+                <button class="legend-item active" data-type="all">All Features</button>
+                <button class="legend-item" data-type="volcano">Volcanoes</button>
+                <button class="legend-item" data-type="canyon">Canyons</button>
+                <button class="legend-item" data-type="crater">Craters</button>
+                <button class="legend-item" data-type="plain">Plains</button>
+                <button class="legend-item" data-type="region">Regions</button>
+                <button class="legend-item" data-type="pole">Polar Caps</button>
+            </div>
+
+            <!-- Feature list -->
+            <div class="feature-quick-list" id="feature-quick-list"></div>
+        </section>
+
+        <!-- RESEARCH VIEW: AI Questions & Reports -->
+        <section class="view view-research" id="view-research">
+            <div class="research-layout">
+                <div class="research-sidebar">
+                    <div class="research-header">
+                        <h2>AI Research Log</h2>
+                        <p class="research-tagline">Novel questions posed by GLM-4.5-Flash</p>
+                    </div>
+                    <div class="research-stats" id="research-stats"></div>
+                    <div class="question-list" id="question-list">
+                        <div class="loading-inline">Loading AI research...</div>
+                    </div>
+                </div>
+                <div class="research-detail" id="research-detail">
+                    <div class="research-empty">
+                        <div class="empty-icon">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <p>Select a question to read its research report</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TIMELINE VIEW -->
+        <section class="view view-timeline" id="view-timeline">
+            <div class="timeline-header">
+                <h2>Discovery Timeline</h2>
+                <p>AI poses a new question every 2 days · Research completes in 7 days</p>
+            </div>
+            <div class="timeline-container" id="timeline-container">
+                <div class="loading-inline">Building timeline...</div>
+            </div>
+        </section>
+
+        <!-- SOURCES VIEW -->
+        <section class="view view-sources" id="view-sources">
+            <div class="sources-header">
+                <h2>Authoritative Data Sources</h2>
+                <p>All AI research is grounded in data from these four globally authoritative Mars science institutions.</p>
+            </div>
+            <div class="sources-grid" id="sources-grid"></div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-left">
+            <span>Powered by GLM-4.5-Flash · Three.js · GitHub Pages</span>
+        </div>
+        <div class="footer-right">
+            <span>Data: NASA · ESA · Mars Society · IGG CAS</span>
+        </div>
+    </footer>
+
+    <!-- Three.js via import map (ES Modules) -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+        }
+    }
+    </script>
+    <!-- App scripts -->
+    <script type="module" src="js/mars3d.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
