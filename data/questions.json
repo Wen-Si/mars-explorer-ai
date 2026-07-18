@@ -57,5 +57,19 @@
     "status": "researching",
     "report_ready_date": "2026-07-23",
     "report_file": null
+  },
+  {
+    "id": "Q005",
+    "title": "Do Martian microtopographic features (e.g., ripples, dunes, and rock formations) create localized microclimates that influence the diurnal stability of transient liquid water films and their potential for hosting microbial life?",
+    "category": "Astrobiology",
+    "rationale": "This question is novel as it shifts focus from large-scale Martian climate to microtopographic-driven microenvironments, which have not been systematically investigated for their role in stabilizing transient liquid water and creating potential habitable niches.",
+    "hypothesis": "Microtopographic features on Mars create localized thermal and humidity gradients that prolong the stability of transient liquid water films, enhancing the potential for microbial survival and activity in specific microenvironments.",
+    "key_data_needed": "High-resolution topographic and thermal imaging (e.g., from HiRISE or future missions), coupled with in-situ humidity and temperature measurements in microenvironments, and spectroscopic analysis of surface hydration states.",
+    "implications": "Answering this would revolutionize our understanding of Mars' habitability by revealing how microscale features may have preserved liquid water and created biologically relevant niches, with implications for both past and present-day habitability and the search for life.",
+    "asked_date": "2026-07-18",
+    "asked_timestamp": "2026-07-18T09:47:47.250879+00:00",
+    "status": "researching",
+    "report_ready_date": "2026-07-25",
+    "report_file": null
   }
 ]
