@@ -130,54 +130,85 @@
         // 2D fallback: show Mars image if WebGL is not available
         const container = document.getElementById('mars-globe');
         const loader = document.getElementById('globe-loading');
-        if (loader) {
-            loader.innerHTML = `
-                <div style="text-align:center;padding:20px;">
-                    <img src="data/textures/mars_color.jpg" alt="Mars" style="width:400px;height:400px;border-radius:50%;object-fit:cover;box-shadow:0 0 60px rgba(212,87,30,0.4);"/>
-                    <p style="margin-top:20px;color:var(--brass-glow);font-family:var(--font-mono);font-size:12px;">2D View (WebGL not available in this browser)</p>
+
+        // Put the image inside #mars-globe (not the loading screen)
+        // so the reticle frame (z-index:5) is visible on top
+        if (container) {
+            container.innerHTML = `
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                    <img src="data/textures/mars_color.jpg" alt="Mars"
+                         style="width:min(400px,60vw);height:min(400px,60vw);border-radius:50%;object-fit:cover;box-shadow:0 0 60px rgba(212,87,30,0.4);"/>
+                    <p style="margin-top:20px;color:var(--brass-glow);font-family:var(--font-mono);font-size:12px;">2D View · WebGL not available</p>
                 </div>
             `;
-            loader.classList.remove('hidden');
-            loader.style.background = 'radial-gradient(ellipse at center, #1a140e, #050402)';
         }
-        // Still allow feature clicking from the quick list
-        if (!window.MarsGlobe) {
-            window.MarsGlobe = {
-                flyTo: () => {},
-                setFilter: () => {},
-                toggleAutoRotate: () => false,
-                resetView: () => {},
-                TYPE_COLORS: {
-                    volcano: '#d4571e', canyon: '#c9a84c', crater: '#8c2e10',
-                    plain: '#7a8a4e', region: '#b08d3e', pole: '#f5ecda',
-                },
-            };
+        // Hide the loading screen so it doesn't cover the reticle frame
+        if (loader) {
+            loader.classList.add('hidden');
         }
+
+        // Always override MarsGlobe with safe no-op stubs for 2D mode
+        window.MarsGlobe = {
+            flyTo: () => {},
+            setFilter: () => {},
+            toggleAutoRotate: () => false,
+            resetView: () => {},
+            TYPE_COLORS: {
+                volcano: '#d4571e', canyon: '#c9a84c', crater: '#8c2e10',
+                plain: '#7a8a4e', region: '#b08d3e', pole: '#f5ecda',
+            },
+        };
+
+        // Set up globe UI controls (same as 3D mode)
+        setupGlobeUI();
     }
 
     function initGlobe() {
         if (!window.MarsGlobe) return;
         MarsGlobe.init('mars-globe', featuresData, onFeatureClick);
 
-        // Controls
-        document.getElementById('toggle-rotation').addEventListener('click', function () {
-            const rotating = MarsGlobe.toggleAutoRotate();
-            this.style.color = rotating ? '' : 'var(--mars-glow)';
-        });
-        document.getElementById('reset-view').addEventListener('click', () => {
-            MarsGlobe.resetView();
-            document.getElementById('feature-panel').classList.remove('visible');
-        });
+        // Set up globe UI controls
+        setupGlobeUI();
+    }
+
+    // Set up globe control buttons and legend filters
+    // Called from both initGlobe() and initGlobeFallback()
+    function setupGlobeUI() {
+        // Toggle rotation button
+        const toggleBtn = document.getElementById('toggle-rotation');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                const rotating = window.MarsGlobe.toggleAutoRotate();
+                this.style.color = rotating ? '' : 'var(--mars-glow)';
+            });
+        }
+
+        // Reset view button
+        const resetBtn = document.getElementById('reset-view');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                window.MarsGlobe.resetView();
+                document.getElementById('feature-panel').classList.remove('visible');
+            });
+        }
 
         // Legend filters
         document.querySelectorAll('.legend-item').forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelectorAll('.legend-item').forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
-                MarsGlobe.setFilter(item.dataset.type);
+                window.MarsGlobe.setFilter(item.dataset.type);
                 renderQuickList(item.dataset.type);
             });
         });
+
+        // Panel close button
+        const closeBtn = document.getElementById('panel-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                document.getElementById('feature-panel').classList.remove('visible');
+            });
+        }
     }
 
     function onFeatureClick(feature, index) {
@@ -205,13 +236,14 @@
         const filtered = filter === 'all'
             ? featuresData
             : featuresData.filter(f => f.type === filter);
+        const colors = (window.MarsGlobe && window.MarsGlobe.TYPE_COLORS) || {};
         filtered.forEach((f, i) => {
             const item = document.createElement('div');
             item.className = 'quick-item';
-            const color = MarsGlobe.TYPE_COLORS[f.type] || '#fff';
+            const color = colors[f.type] || '#d4571e';
             item.innerHTML = `<span class="quick-dot" style="background:${color}"></span><span>${f.name}</span>`;
             item.addEventListener('click', () => {
-                MarsGlobe.flyTo(f.latitude, f.longitude);
+                if (window.MarsGlobe) window.MarsGlobe.flyTo(f.latitude, f.longitude);
                 onFeatureClick(f, i);
             });
             list.appendChild(item);
@@ -261,7 +293,7 @@
         sorted.forEach((q, idx) => {
             const card = document.createElement('div');
             card.className = 'question-card';
-            if (idx === 0 && currentQuestion) card.classList.add('selected');
+            if (currentQuestion && q.id === currentQuestion.id) card.classList.add('selected');
             const statusClass = q.status === 'completed' ? 'completed' : 'researching';
             const statusText = q.status === 'completed' ? 'Report Ready' : 'Researching';
             card.innerHTML = `
