@@ -52,6 +52,7 @@
     // ===== Starfield Background =====
     function initStarfield() {
         const canvas = document.getElementById('starfield');
+        if (!canvas) return; // No starfield canvas in celestial cartography design
         const ctx = canvas.getContext('2d');
         let stars = [];
 
@@ -132,12 +133,12 @@
         if (loader) {
             loader.innerHTML = `
                 <div style="text-align:center;padding:20px;">
-                    <img src="data/textures/mars_color.jpg" alt="Mars" style="width:400px;height:400px;border-radius:50%;object-fit:cover;box-shadow:0 0 60px rgba(232,93,42,0.4);"/>
-                    <p style="margin-top:20px;color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">2D View (WebGL not available in this browser)</p>
+                    <img src="data/textures/mars_color.jpg" alt="Mars" style="width:400px;height:400px;border-radius:50%;object-fit:cover;box-shadow:0 0 60px rgba(212,87,30,0.4);"/>
+                    <p style="margin-top:20px;color:var(--brass-glow);font-family:var(--font-mono);font-size:12px;">2D View (WebGL not available in this browser)</p>
                 </div>
             `;
             loader.classList.remove('hidden');
-            loader.style.background = 'var(--space-void)';
+            loader.style.background = 'radial-gradient(ellipse at center, #1a140e, #050402)';
         }
         // Still allow feature clicking from the quick list
         if (!window.MarsGlobe) {
@@ -147,8 +148,8 @@
                 toggleAutoRotate: () => false,
                 resetView: () => {},
                 TYPE_COLORS: {
-                    volcano: '#ff6b35', canyon: '#f4a261', crater: '#e9c46a',
-                    plain: '#a8dadc', region: '#b08968', pole: '#e0fbfc',
+                    volcano: '#d4571e', canyon: '#c9a84c', crater: '#8c2e10',
+                    plain: '#7a8a4e', region: '#b08d3e', pole: '#f5ecda',
                 },
             };
         }
@@ -393,19 +394,19 @@
     function parseMarkdown(md) {
         let html = md;
         // Remove the auto-generated header (already shown in report-header)
-        html = html.replace(/^#\s+.+$/m, '');
-        html = html.replace(/^\*\*Category:.+$/m, '');
-        html = html.replace(/^\*\*Asked:.+$/m, '');
-        html = html.replace(/^\*\*Report Generated:.+$/m, '');
-        html = html.replace(/^\*\*Hypothesis:.+$/m, '');
-        html = html.replace(/^---+$/m, '');
+        html = html.replace(/^#\s+.+$/gm, '');
+        html = html.replace(/^\*\*Category:.+$/gm, '');
+        html = html.replace(/^\*\*Asked:.+$/gm, '');
+        html = html.replace(/^\*\*Report Generated:.+$/gm, '');
+        html = html.replace(/^\*\*Hypothesis:.+$/gm, '');
+        html = html.replace(/^---+$/gm, '');
 
         // Escape HTML
         html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
         // Code blocks
         html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) =>
-            `<pre style="background:var(--space-card);padding:14px;border-radius:6px;overflow-x:auto;margin:14px 0"><code>${code.trim()}</code></pre>`);
+            `<pre style="background:var(--paper-dark);padding:14px;border-radius:1px;overflow-x:auto;margin:14px 0;border:1px solid var(--paper-deep)"><code>${code.trim()}</code></pre>`);
 
         // Headers
         html = html.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');

@@ -24,12 +24,12 @@ const MarsGlobe = (function () {
     let animFrameId = null;
 
     const TYPE_COLORS = {
-        volcano: '#ff6b35',
-        canyon: '#f4a261',
-        crater: '#e9c46a',
-        plain: '#a8dadc',
-        region: '#b08968',
-        pole: '#e0fbfc',
+        volcano: '#d4571e',   // mars-glow — bright orange for Montes
+        canyon:  '#c9a84c',   // brass-glow — gold for Valles
+        crater:  '#8c2e10',   // mars-deep — dark red for Crateres
+        plain:   '#7a8a4e',   // olive sage — muted green for Planitiae
+        region:  '#b08d3e',   // brass-light — bronze for Terrae
+        pole:    '#f5ecda',   // paper-light — ivory for Polus
     };
 
     function init(containerId, features, clickCallback) {
@@ -54,15 +54,15 @@ const MarsGlobe = (function () {
         raycaster = new THREE.Raycaster();
         mouse = new THREE.Vector2();
 
-        // Lighting
-        const ambient = new THREE.AmbientLight(0x442211, 0.6);
+        // Lighting — warm observatory tones
+        const ambient = new THREE.AmbientLight(0x3a2a18, 0.65);
         scene.add(ambient);
 
         const sunLight = new THREE.DirectionalLight(0xffe4c4, 1.4);
         sunLight.position.set(5, 3, 5);
         scene.add(sunLight);
 
-        const rimLight = new THREE.DirectionalLight(0x4488ff, 0.3);
+        const rimLight = new THREE.DirectionalLight(0xc9a84c, 0.2);
         rimLight.position.set(-5, 0, -3);
         scene.add(rimLight);
 
@@ -168,9 +168,10 @@ const MarsGlobe = (function () {
             positions[i * 3 + 2] = r * Math.cos(phi);
 
             const tint = Math.random();
-            colors[i * 3] = 0.8 + tint * 0.2;
-            colors[i * 3 + 1] = 0.8 + tint * 0.2;
-            colors[i * 3 + 2] = 0.9 + tint * 0.1;
+            // Warm cream-ivory stars (like aged star chart ink)
+            colors[i * 3] = 0.95 + tint * 0.05;     // R
+            colors[i * 3 + 1] = 0.88 + tint * 0.07;  // G
+            colors[i * 3 + 2] = 0.72 + tint * 0.13;  // B
         }
 
         starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -180,7 +181,7 @@ const MarsGlobe = (function () {
             size: 0.4,
             vertexColors: true,
             transparent: true,
-            opacity: 0.8,
+            opacity: 0.6,
         });
 
         starField3D = new THREE.Points(starGeometry, starMaterial);
