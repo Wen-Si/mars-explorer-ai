@@ -1,4 +1,4 @@
-# Mars Explorer AI
+# AI for Mars
 
 An autonomous AI-powered Mars science discovery platform that poses novel scientific questions about Mars and conducts research to answer them.
 
