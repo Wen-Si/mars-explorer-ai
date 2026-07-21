@@ -71,5 +71,19 @@
     "status": "researching",
     "report_ready_date": "2026-07-25",
     "report_file": null
+  },
+  {
+    "id": "Q006",
+    "title": "Does the Martian ionosphere's coupling with the magnetosphere generate anomalous electromagnetic fields that could influence the distribution and preservation of subsurface organics?",
+    "category": "Geophysics",
+    "rationale": "This question bridges ionospheric physics, electromagnetic geophysics, and astrobiology, exploring an understudied mechanism for organics redistribution on Mars. It moves beyond surface-focused studies to examine how atmospheric and magnetic interactions might preserve or alter subsurface organics, a critical factor in Mars' habitability potential.",
+    "hypothesis": "Localized electromagnetic fields from ionosphere-magnetosphere coupling create preferential zones of electrochemical processing in the subsurface, enhancing the preservation of complex organics while potentially degrading others.",
+    "key_data_needed": "High-resolution magnetic field measurements from orbit, ground-penetrating radar data to map subsurface stratigraphy, in-situ organic detection at multiple depths, and simultaneous ionospheric plasma observations.",
+    "implications": "Answering this would reveal a new planetary process affecting organics preservation, guide future sample return strategies to optimal sites, and provide insights into how electromagnetic fields might influence habitability on other airless or weakly magnetized bodies.",
+    "asked_date": "2026-07-21",
+    "asked_timestamp": "2026-07-21T08:34:38.303614+00:00",
+    "status": "researching",
+    "report_ready_date": "2026-07-28",
+    "report_file": null
   }
 ]
