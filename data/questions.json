@@ -85,5 +85,19 @@
     "status": "researching",
     "report_ready_date": "2026-07-28",
     "report_file": null
+  },
+  {
+    "id": "Q007",
+    "title": "Does the Martian crustal magnetic field generate localized electrochemical environments at depth that drive redox reactions between subsurface perchlorates and hydrothermal minerals, potentially creating subsurface oases for chemosynthetic life?",
+    "category": "Geophysics",
+    "rationale": "This question uniquely links crustal magnetism with subsurface redox chemistry and hydrothermal processes, a nexus not yet explored despite evidence of both magnetic anomalies and subsurface ice. It addresses a potential hidden habitability mechanism beyond the surface-focused paradigm.",
+    "hypothesis": "Localized magnetic anomalies in the Martian crust create electrochemical gradients that promote redox reactions between perchlorate-rich brines and hydrothermal minerals, producing localized energy sources and chemical disequilibria conducive to chemosynthetic life.",
+    "key_data_needed": "High-resolution subsurface magnetic field maps (from future missions), ground-penetrating radar to identify subsurface ice and brine layers, in-situ chemical analysis of perchlorate-mineral interactions, and orbital data on crustal hydrothermal alteration signatures.",
+    "implications": "This could reveal a previously unknown subsurface biosphere paradigm on Mars, redefine our understanding of Martian crustal habitability, and provide a template for detecting life in similarly magnetized worlds in our solar system and beyond.",
+    "asked_date": "2026-07-23",
+    "asked_timestamp": "2026-07-23T08:35:09.376497+00:00",
+    "status": "researching",
+    "report_ready_date": "2026-07-30",
+    "report_file": null
   }
 ]
