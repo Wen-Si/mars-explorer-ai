@@ -26,6 +26,7 @@ jobs:
           GLM_API_KEY: ${{ secrets.GLM_API_KEY }}
         run: |
           python3 scripts/mars_ai_engine.py data daily
+          python3 scripts/mars_ai_engine.py data review-existing
 
       - name: Commit and push changes
         run: |
