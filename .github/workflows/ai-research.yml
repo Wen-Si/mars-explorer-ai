@@ -31,7 +31,7 @@ jobs:
         run: |
           git config --global user.name "Mars AI Bot"
           git config --global user.email "mars-ai-bot@users.noreply.github.com"
-          git add data/questions.json data/reports/
+          git add data/questions.json data/reports/ data/reviews/
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else

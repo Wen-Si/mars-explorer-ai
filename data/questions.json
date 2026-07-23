@@ -12,7 +12,15 @@
     "status": "completed",
     "report_ready_date": "2026-06-28",
     "report_file": "reports/Q001_report.md",
-    "report_generated": "2026-07-18T11:03:11.105680+00:00"
+    "report_generated": "2026-07-18T11:03:11.105680+00:00",
+    "review_score": 85,
+    "review_dimensions": {
+      "scientific_validity": 90,
+      "rationality": 85,
+      "standardization": 85,
+      "logicality": 85
+    },
+    "review_iterations": 2
   },
   {
     "id": "Q002",
@@ -27,7 +35,15 @@
     "status": "completed",
     "report_ready_date": "2026-07-07",
     "report_file": "reports/Q002_report.md",
-    "report_generated": "2026-07-18T11:03:11.105680+00:00"
+    "report_generated": "2026-07-18T11:03:11.105680+00:00",
+    "review_score": 85,
+    "review_dimensions": {
+      "scientific_validity": 95,
+      "rationality": 85,
+      "standardization": 90,
+      "logicality": 80
+    },
+    "review_iterations": 2
   },
   {
     "id": "Q003",
@@ -42,7 +58,15 @@
     "status": "completed",
     "report_ready_date": "2026-07-16",
     "report_file": "reports/Q003_report.md",
-    "report_generated": "2026-07-18T11:03:11.105680+00:00"
+    "report_generated": "2026-07-18T11:03:11.105680+00:00",
+    "review_score": 75,
+    "review_dimensions": {
+      "scientific_validity": 85,
+      "rationality": 75,
+      "standardization": 80,
+      "logicality": 70
+    },
+    "review_iterations": 2
   },
   {
     "id": "Q004",

@@ -356,6 +356,39 @@
         try {
             const resp = await fetch(`data/${q.report_file}`);
             const md = await resp.text();
+
+            // Try to load review data
+            let reviewBadge = '';
+            try {
+                const reviewResp = await fetch(`data/reviews/${q.id}_review.json`);
+                if (reviewResp.ok) {
+                    const reviewData = await reviewResp.json();
+                    const dims = reviewData.final_dimension_scores || {};
+                    const score = reviewData.final_overall_score || 0;
+                    const scoreColor = score >= 85 ? '#4a7c59' : score >= 70 ? '#b8860b' : '#8b3a3a';
+                    const dimLabels = {
+                        scientific_validity: 'Scientific',
+                        rationality: 'Rationality',
+                        standardization: 'Standard',
+                        logicality: 'Logic'
+                    };
+                    const dimBadges = Object.entries(dims).map(([key, val]) => {
+                        const label = dimLabels[key] || key;
+                        const color = val >= 85 ? '#4a7c59' : val >= 70 ? '#b8860b' : '#8b3a3a';
+                        return `<span class="review-dim" style="color:${color}">${label}: ${val}</span>`;
+                    }).join('');
+                    const iterText = reviewData.total_iterations > 0
+                        ? ` · Revised ${reviewData.total_iterations}x`
+                        : ' · Passed first review';
+                    reviewBadge = `
+                        <div class="review-badge">
+                            <div class="review-score" style="color:${scoreColor}">Review Score: ${score}/100${iterText}</div>
+                            <div class="review-dims">${dimBadges}</div>
+                        </div>
+                    `;
+                }
+            } catch (e) { /* review data not available */ }
+
             detail.innerHTML = `
                 <div class="report-header">
                     <span class="report-category">${q.category || 'Science'}</span>
@@ -365,6 +398,7 @@
                         <span><strong>Report:</strong> ${q.report_generated ? q.report_generated.split('T')[0] : ''}</span>
                         <span><strong>Model:</strong> GLM-4.5-Flash</span>
                     </div>
+                    ${reviewBadge}
                 </div>
                 <div class="report-body">${parseMarkdown(md)}</div>
             `;

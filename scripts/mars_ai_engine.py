@@ -246,13 +246,211 @@ Write the report now in Markdown."""
     )
 
 
+# ---------------------------------------------------------------------------
+# Autonomous Multi-Dimensional Review System
+# ---------------------------------------------------------------------------
+
+REVIEW_PASS_THRESHOLD = 80  # Minimum score per dimension to pass without revision
+
+
+def review_report(question, report_text):
+    """Review a research report across four dimensions: scientific validity,
+    rationality, standardization, and logicality. Returns a structured review dict."""
+    prompt = f"""You are a STRICT, INDEPENDENT scientific peer reviewer for a top-tier planetary science journal (e.g., Nature Geoscience). Your task is to critically evaluate the following Mars research report across FOUR dimensions. Be rigorous and unforgiving of errors.
+
+QUESTION UNDER INVESTIGATION:
+Title: {question['title']}
+Category: {question['category']}
+Hypothesis: {question.get('hypothesis', '')}
+
+{VERIFIED_FACTS_CONSTRAINTS}
+
+REPORT TO REVIEW:
+---
+{report_text}
+---
+
+Evaluate the report across these FOUR dimensions, scoring each 0-100:
+
+1. SCIENTIFIC VALIDITY (科学性): Are all scientific claims factually accurate? Are citations real and correctly attributed? Are instrument capabilities described correctly? Are quantitative values verified and correctly stated? Are there any fabricated citations, incorrect data, or misattributed instrument capabilities? Cross-check against the VERIFIED FACTS above.
+
+2. RATIONALITY (合理性): Is the reasoning sound? Are conclusions justified by the evidence presented? Are hypotheses framed appropriately (as hypotheses, not established fact)? Are uncertainties acknowledged? Are alternative explanations considered? Is the analysis balanced?
+
+3. STANDARDIZATION (规范性): Does the report follow proper scientific writing standards? Is the structure complete (Abstract, Introduction, Methodology, Evidence, Synthesis, Implications, Open Questions, References)? Are citations formatted consistently? Is the language precise and professional? Are sections properly labeled?
+
+4. LOGICALITY (逻辑性): Is the argumentation logically coherent? Do sections flow logically from one to the next? Are there any contradictions within the report? Does the synthesis actually synthesize the evidence presented? Are conclusions consistent with the analysis? Are there any logical fallacies?
+
+Return your review as a JSON object with this EXACT structure:
+{{
+  "overall_score": <integer 0-100>,
+  "dimensions": {{
+    "scientific_validity": {{
+      "score": <integer 0-100>,
+      "assessment": "<2-3 sentence summary of this dimension>",
+      "issues": ["<specific issue 1>", "<specific issue 2>", ...]
+    }},
+    "rationality": {{
+      "score": <integer 0-100>,
+      "assessment": "<2-3 sentence summary>",
+      "issues": ["<specific issue 1>", ...]
+    }},
+    "standardization": {{
+      "score": <integer 0-100>,
+      "assessment": "<2-3 sentence summary>",
+      "issues": ["<specific issue 1>", ...]
+    }},
+    "logicality": {{
+      "score": <integer 0-100>,
+      "assessment": "<2-3 sentence summary>",
+      "issues": ["<specific issue 1>", ...]
+    }}
+  }},
+  "revision_needed": <true if ANY dimension scores below {REVIEW_PASS_THRESHOLD} OR if any critical factual error is found>,
+  "revision_instructions": "<If revision_needed is true, provide SPECIFIC, ACTIONABLE instructions for fixing each identified issue. If false, write 'No revision needed - report meets scientific standards.'>"
+}}
+
+Be thorough and specific. List EVERY issue you find, no matter how minor. Return ONLY the JSON object."""
+
+    response = call_glm(
+        [{"role": "user", "content": prompt}],
+        temperature=0.2,
+        max_tokens=4096,
+    )
+    review = parse_json_response(response)
+
+    # Ensure structure completeness
+    review.setdefault("overall_score", 0)
+    review.setdefault("dimensions", {})
+    for dim in ["scientific_validity", "rationality", "standardization", "logicality"]:
+        review["dimensions"].setdefault(dim, {"score": 0, "assessment": "", "issues": []})
+        review["dimensions"][dim].setdefault("score", 0)
+        review["dimensions"][dim].setdefault("assessment", "")
+        review["dimensions"][dim].setdefault("issues", [])
+    review.setdefault("revision_needed", False)
+    review.setdefault("revision_instructions", "")
+
+    return review
+
+
+def revise_report(question, report_text, review):
+    """Revise a report based on review feedback to fix all identified issues."""
+    issues_summary = json.dumps(review.get("dimensions", {}), indent=2, ensure_ascii=False)
+    revision_instructions = review.get("revision_instructions", "Fix all identified issues.")
+
+    prompt = f"""You are a LEADING Mars planetary scientist revising a research report to fix ALL issues identified by a rigorous peer reviewer. Your revision must address every single issue while maintaining the report's strengths.
+
+QUESTION UNDER INVESTIGATION:
+Title: {question['title']}
+Category: {question['category']}
+Hypothesis: {question.get('hypothesis', '')}
+
+{VERIFIED_FACTS_CONSTRAINTS}
+
+ORIGINAL REPORT:
+---
+{report_text}
+---
+
+REVIEWER'S DETAILED FINDINGS (issues to fix):
+{issues_summary}
+
+REVIEWER'S REVISION INSTRUCTIONS:
+{revision_instructions}
+
+CRITICAL REVISION RULES:
+1. Fix EVERY issue listed by the reviewer. Do not skip any.
+2. If a factual error was found, correct it using ONLY verified facts from the constraints above.
+3. If a citation was fabricated or incorrect, remove it or replace with a verified one.
+4. If an instrument capability was misstated, correct it to match verified capabilities.
+5. If a logical inconsistency was found, restructure the argument to eliminate it.
+6. If a structural issue was found, fix the formatting/structure.
+7. Maintain the same overall structure: Abstract, Introduction, Methodology, Evidence and Analysis, Synthesis, Implications, Open Questions, References.
+8. Do NOT introduce new factual claims that are not in the verified facts.
+9. Do NOT fabricate any new citations.
+10. Keep the report comprehensive (2000-3000 words).
+11. Output ONLY the revised report in Markdown. Do not include any meta-commentary about what you changed.
+
+Write the COMPLETE revised report now in Markdown."""
+
+    return call_glm(
+        [{"role": "user", "content": prompt}],
+        temperature=0.3,
+        max_tokens=8192,
+    )
+
+
+def generate_report_with_review(question, reports_dir, reviews_dir, now):
+    """Full pipeline: generate report -> review -> revise if needed -> re-review.
+    Returns (final_report_text, review_history_list)."""
+    # Step 1: Generate initial report
+    print(f"  [1/4] Generating initial report...", flush=True)
+    report = generate_report(question)
+
+    # Step 2: Review the report
+    print(f"  [2/4] Conducting multi-dimensional review...", flush=True)
+    review = review_report(question, report)
+    review["iteration"] = 0
+    review["timestamp"] = now.isoformat()
+    review_history = [review]
+
+    dim_scores = {d: review["dimensions"][d]["score"] for d in review["dimensions"]}
+    print(f"  Review scores: {dim_scores}", flush=True)
+    print(f"  Overall: {review['overall_score']}/100, Revision needed: {review['revision_needed']}", flush=True)
+
+    # Step 3: If revision needed, revise and re-review (up to 2 iterations)
+    max_iterations = 2
+    iteration = 0
+    while review.get("revision_needed", False) and iteration < max_iterations:
+        iteration += 1
+        print(f"  [3/4] Revision iteration {iteration}/{max_iterations}...", flush=True)
+        report = revise_report(question, report, review)
+
+        print(f"  Re-reviewing revised report...", flush=True)
+        review = review_report(question, report)
+        review["iteration"] = iteration
+        review["timestamp"] = now.isoformat()
+        review_history.append(review)
+
+        dim_scores = {d: review["dimensions"][d]["score"] for d in review["dimensions"]}
+        print(f"  Revised scores: {dim_scores}", flush=True)
+        print(f"  Overall: {review['overall_score']}/100, Revision needed: {review['revision_needed']}", flush=True)
+
+    if review.get("revision_needed", False):
+        print(f"  [4/4] Max revisions reached. Report finalized with remaining issues noted.", flush=True)
+    else:
+        print(f"  [4/4] Report passed review. Finalized.", flush=True)
+
+    # Save review metadata
+    review_filename = f"{question['id']}_review.json"
+    review_path = os.path.join(reviews_dir, review_filename)
+    review_data = {
+        "question_id": question["id"],
+        "question_title": question["title"],
+        "review_date": now.strftime("%Y-%m-%d"),
+        "total_iterations": len(review_history) - 1,
+        "final_overall_score": review_history[-1]["overall_score"],
+        "final_dimension_scores": {
+            d: review_history[-1]["dimensions"][d]["score"] for d in review_history[-1]["dimensions"]
+        },
+        "final_revision_needed": review_history[-1]["revision_needed"],
+        "review_history": review_history,
+    }
+    with open(review_path, "w") as f:
+        json.dump(review_data, f, indent=2, ensure_ascii=False)
+    print(f"  Review metadata saved to {review_path}", flush=True)
+
+    return report, review_data
+
+
 def main():
     data_dir = sys.argv[1] if len(sys.argv) > 1 else "data"
     mode = sys.argv[2] if len(sys.argv) > 2 else "seed"
 
     questions_file = os.path.join(data_dir, "questions.json")
     reports_dir = os.path.join(data_dir, "reports")
+    reviews_dir = os.path.join(data_dir, "reviews")
     os.makedirs(reports_dir, exist_ok=True)
+    os.makedirs(reviews_dir, exist_ok=True)
 
     # Load existing questions
     existing = []
@@ -293,20 +491,23 @@ def main():
             print("No questions pending report generation.", flush=True)
             return
         print(f"Generating report for {target['id']}: {target['title']}", flush=True)
-        report = generate_report(target)
+        report, review_data = generate_report_with_review(target, reports_dir, reviews_dir, now)
         report_filename = f"{target['id']}_report.md"
         report_path = os.path.join(reports_dir, report_filename)
         with open(report_path, "w") as f:
             f.write(f"# {target['title']}\n\n")
             f.write(f"**Category:** {target['category']}  \n")
             f.write(f"**Asked:** {target['asked_date']}  \n")
-            f.write(f"**Report Generated:** {now.strftime('%Y-%m-%d')}  \n\n")
+            f.write(f"**Report Generated:** {now.strftime('%Y-%m-%d')} (v2 — Reviewed & Revised)\n\n")
             f.write(f"**Hypothesis:** {target['hypothesis']}\n\n")
             f.write("---\n\n")
             f.write(report)
         target["report_file"] = f"reports/{report_filename}"
         target["status"] = "completed"
         target["report_generated"] = now.isoformat()
+        target["review_score"] = review_data["final_overall_score"]
+        target["review_dimensions"] = review_data["final_dimension_scores"]
+        target["review_iterations"] = review_data["total_iterations"]
         with open(questions_file, "w") as f:
             json.dump(existing, f, indent=2, ensure_ascii=False)
         print(f"Report saved to {report_path}", flush=True)
@@ -334,22 +535,25 @@ def main():
             with open(questions_file, "w") as f:
                 json.dump(existing, f, indent=2, ensure_ascii=False)
             print(f"Generated: {question['title']}", flush=True)
-            # Generate report
-            print(f"Generating report...", flush=True)
-            report = generate_report(question)
+            # Generate report with review
+            print(f"Generating report with autonomous review...", flush=True)
+            report, review_data = generate_report_with_review(question, reports_dir, reviews_dir, asked_date + timedelta(days=7))
             report_filename = f"{question_id}_report.md"
             report_path = os.path.join(reports_dir, report_filename)
             with open(report_path, "w") as f:
                 f.write(f"# {question['title']}\n\n")
                 f.write(f"**Category:** {question['category']}  \n")
                 f.write(f"**Asked:** {question['asked_date']}  \n")
-                f.write(f"**Report Generated:** {(asked_date + timedelta(days=7)).strftime('%Y-%m-%d')}  \n\n")
+                f.write(f"**Report Generated:** {(asked_date + timedelta(days=7)).strftime('%Y-%m-%d')} (v2 — Reviewed & Revised)\n\n")
                 f.write(f"**Hypothesis:** {question['hypothesis']}\n\n")
                 f.write("---\n\n")
                 f.write(report)
             question["report_file"] = f"reports/{report_filename}"
             question["status"] = "completed"
             question["report_generated"] = (asked_date + timedelta(days=7)).isoformat()
+            question["review_score"] = review_data["final_overall_score"]
+            question["review_dimensions"] = review_data["final_dimension_scores"]
+            question["review_iterations"] = review_data["total_iterations"]
             with open(questions_file, "w") as f:
                 json.dump(existing, f, indent=2, ensure_ascii=False)
             print(f"Report saved.", flush=True)
@@ -390,20 +594,23 @@ def main():
                 if age_days >= 7:
                     print(f"\nGenerating report for {q['id']} (age: {age_days}d): {q['title']}", flush=True)
                     try:
-                        report = generate_report(q)
+                        report, review_data = generate_report_with_review(q, reports_dir, reviews_dir, now)
                         report_filename = f"{q['id']}_report.md"
                         report_path = os.path.join(reports_dir, report_filename)
                         with open(report_path, "w") as f:
                             f.write(f"# {q['title']}\n\n")
                             f.write(f"**Category:** {q['category']}  \n")
                             f.write(f"**Asked:** {q['asked_date']}  \n")
-                            f.write(f"**Report Generated:** {now.strftime('%Y-%m-%d')}  \n\n")
+                            f.write(f"**Report Generated:** {now.strftime('%Y-%m-%d')} (v2 — Reviewed & Revised)\n\n")
                             f.write(f"**Hypothesis:** {q.get('hypothesis', '')}\n\n")
                             f.write("---\n\n")
                             f.write(report)
                         q["report_file"] = f"reports/{report_filename}"
                         q["status"] = "completed"
                         q["report_generated"] = now.isoformat()
+                        q["review_score"] = review_data["final_overall_score"]
+                        q["review_dimensions"] = review_data["final_dimension_scores"]
+                        q["review_iterations"] = review_data["total_iterations"]
                         reports_generated += 1
                         print(f"Report saved.", flush=True)
                         time.sleep(2)
@@ -446,6 +653,127 @@ def main():
                 print(f"Failed to generate question: {e}", file=sys.stderr)
 
         print(f"\n=== Daily run complete: {reports_generated} reports, {'1' if should_ask else '0'} new question ===", flush=True)
+
+    elif mode == "review-existing":
+        # Review and revise existing reports that haven't been through the review pipeline
+        print("=== Reviewing Existing Reports ===", flush=True)
+        reviewed_count = 0
+        for q in existing:
+            if q.get("status") != "completed" or not q.get("report_file"):
+                continue
+            # Skip if already has review data
+            review_filename = f"{q['id']}_review.json"
+            review_path = os.path.join(reviews_dir, review_filename)
+            if os.path.exists(review_path):
+                print(f"\n{q['id']} already reviewed. Skipping.", flush=True)
+                continue
+
+            # Read existing report
+            report_path = os.path.join(data_dir, q["report_file"])
+            if not os.path.exists(report_path):
+                print(f"\n{q['id']} report file not found. Skipping.", flush=True)
+                continue
+
+            print(f"\nReviewing {q['id']}: {q['title']}", flush=True)
+            with open(report_path, "r") as f:
+                full_report = f.read()
+
+            # Extract just the report body (after the header and --- separator)
+            parts = full_report.split("---\n\n", 1)
+            report_body = parts[1] if len(parts) > 1 else full_report
+
+            try:
+                # Review the EXISTING report (not generate a new one)
+                print(f"  [1/3] Conducting multi-dimensional review...", flush=True)
+                review = review_report(q, report_body)
+                review["iteration"] = 0
+                review["timestamp"] = now.isoformat()
+                review_history = [review]
+
+                dim_scores = {d: review["dimensions"][d]["score"] for d in review["dimensions"]}
+                print(f"  Review scores: {dim_scores}", flush=True)
+                print(f"  Overall: {review['overall_score']}/100, Revision needed: {review['revision_needed']}", flush=True)
+
+                # Helper: save review metadata + revised report
+                def save_review_state(rev_history, rev_report, was_revised):
+                    review_filename = f"{q['id']}_review.json"
+                    review_path = os.path.join(reviews_dir, review_filename)
+                    rdata = {
+                        "question_id": q["id"],
+                        "question_title": q["title"],
+                        "review_date": now.strftime("%Y-%m-%d"),
+                        "total_iterations": len(rev_history) - 1,
+                        "final_overall_score": rev_history[-1]["overall_score"],
+                        "final_dimension_scores": {
+                            d: rev_history[-1]["dimensions"][d]["score"] for d in rev_history[-1]["dimensions"]
+                        },
+                        "final_revision_needed": rev_history[-1]["revision_needed"],
+                        "review_history": rev_history,
+                    }
+                    with open(review_path, "w") as f:
+                        json.dump(rdata, f, indent=2, ensure_ascii=False)
+                    if was_revised:
+                        with open(report_path, "w") as f:
+                            f.write(f"# {q['title']}\n\n")
+                            f.write(f"**Category:** {q['category']}  \n")
+                            f.write(f"**Asked:** {q['asked_date']}  \n")
+                            f.write(f"**Report Generated:** {now.strftime('%Y-%m-%d')} (v3 — Reviewed & Revised)\n\n")
+                            f.write(f"**Hypothesis:** {q.get('hypothesis', '')}\n\n")
+                            f.write("---\n\n")
+                            f.write(rev_report)
+                    return rdata
+
+                # Save initial review (even if no revision needed yet)
+                review_data = save_review_state(review_history, report_body, False)
+
+                # Revise if needed (up to 2 iterations)
+                current_report = report_body
+                max_iterations = 2
+                iteration = 0
+                while review.get("revision_needed", False) and iteration < max_iterations:
+                    iteration += 1
+                    print(f"  [2/3] Revision iteration {iteration}/{max_iterations}...", flush=True)
+                    try:
+                        current_report = revise_report(q, current_report, review)
+
+                        print(f"  Re-reviewing revised report...", flush=True)
+                        review = review_report(q, current_report)
+                        review["iteration"] = iteration
+                        review["timestamp"] = now.isoformat()
+                        review_history.append(review)
+
+                        dim_scores = {d: review["dimensions"][d]["score"] for d in review["dimensions"]}
+                        print(f"  Revised scores: {dim_scores}", flush=True)
+                        print(f"  Overall: {review['overall_score']}/100, Revision needed: {review['revision_needed']}", flush=True)
+
+                        # Save intermediate results after each successful revision
+                        review_data = save_review_state(review_history, current_report, True)
+                        print(f"  Intermediate results saved.", flush=True)
+                    except Exception as rev_e:
+                        print(f"  Revision {iteration} failed: {rev_e}. Keeping previous version.", file=sys.stderr)
+                        break
+
+                if review.get("revision_needed", False):
+                    print(f"  [3/3] Max revisions reached. Report finalized with remaining issues noted.", flush=True)
+                else:
+                    print(f"  [3/3] Report passed review. Finalized.", flush=True)
+
+                print(f"  Review metadata saved.", flush=True)
+
+                q["review_score"] = review_data["final_overall_score"]
+                q["review_dimensions"] = review_data["final_dimension_scores"]
+                q["review_iterations"] = review_data["total_iterations"]
+                reviewed_count += 1
+                print(f"  {q['id']} review complete. Score: {review_data['final_overall_score']}/100", flush=True)
+                time.sleep(2)
+            except Exception as e:
+                print(f"  Failed to review {q['id']}: {e}", file=sys.stderr)
+
+        if reviewed_count > 0:
+            with open(questions_file, "w") as f:
+                json.dump(existing, f, indent=2, ensure_ascii=False)
+
+        print(f"\n=== Review complete: {reviewed_count} reports reviewed ===", flush=True)
 
 
 if __name__ == "__main__":
