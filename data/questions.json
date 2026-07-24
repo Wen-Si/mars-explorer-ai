@@ -78,9 +78,18 @@
     "implications": "Answering this would revolutionize our understanding of Mars' carbon-nitrogen chemistry, reveal a new pathway for prebiotic compound formation without biological activity, and provide insights into how atmospheric processes can shape planetary geochemistry—potentially informing the search for life on other worlds.",
     "asked_date": "2026-07-16",
     "asked_timestamp": "2026-07-16T09:44:33.911051+00:00",
-    "status": "researching",
+    "status": "completed",
     "report_ready_date": "2026-07-23",
-    "report_file": null
+    "report_file": "reports/Q004_report.md",
+    "report_generated": "2026-07-24T08:31:33.297526+00:00",
+    "review_score": 75,
+    "review_dimensions": {
+      "scientific_validity": 85,
+      "rationality": 70,
+      "standardization": 90,
+      "logicality": 80
+    },
+    "review_iterations": 2
   },
   {
     "id": "Q005",
