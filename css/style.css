@@ -1056,18 +1056,280 @@ html, body {
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--mars); }
 
+/* ===== STARMAP VIEW — Celestial Star Chart ===== */
+.view-starmap {
+    flex-direction: row;
+    background: #0a0805;
+}
+
+.starmap-container {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 30% 40%, #1a0e08 0%, #0a0604 50%, #050302 100%);
+}
+
+/* Title overlay — chart cartouche */
+.starmap-overlay-top {
+    position: absolute;
+    top: 24px;
+    left: 28px;
+    right: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 10;
+}
+.starmap-info { pointer-events: auto; }
+.starmap-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--paper-light);
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.8);
+}
+.starmap-title .latin-name {
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--brass-glow);
+    opacity: 0.8;
+}
+.starmap-subtitle {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--brass-glow);
+    margin-top: 5px;
+    opacity: 0.6;
+    letter-spacing: 0.3px;
+}
+
+.starmap-controls { display: flex; gap: 8px; pointer-events: auto; }
+
+/* Constellation legend — catalogue index */
+.starmap-legend {
+    position: absolute;
+    bottom: 24px;
+    left: 28px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    max-width: 60%;
+    z-index: 10;
+}
+.starmap-legend-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--brass-glow);
+    margin-right: 6px;
+    opacity: 0.7;
+}
+.starmap-legend-item {
+    background: rgba(10, 8, 5, 0.65);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(176, 141, 62, 0.25);
+    color: var(--brass-glow);
+    padding: 5px 12px;
+    font-size: 11px;
+    font-family: var(--font-display);
+    font-style: italic;
+    border-radius: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+.starmap-legend-item::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--star-color, var(--brass-glow));
+    margin-right: 7px;
+    box-shadow: 0 0 5px var(--star-color, var(--brass-glow));
+    vertical-align: middle;
+}
+.starmap-legend-item:hover {
+    color: var(--paper-light);
+    border-color: var(--brass-light);
+}
+.starmap-legend-item.active {
+    background: var(--mars-deep);
+    color: var(--paper-light);
+    border-color: var(--mars-glow);
+    font-style: normal;
+}
+
+/* Interaction hints */
+.starmap-hints {
+    position: absolute;
+    bottom: 24px;
+    right: 28px;
+    display: flex;
+    gap: 14px;
+    z-index: 10;
+}
+.starmap-hints span {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    color: var(--brass-glow);
+    opacity: 0.5;
+    letter-spacing: 0.3px;
+}
+
+/* Detail panel — star catalogue entry */
+.starmap-detail {
+    position: absolute;
+    top: 80px;
+    right: 28px;
+    width: 340px;
+    max-height: calc(100% - 180px);
+    overflow-y: auto;
+    background: linear-gradient(180deg, var(--paper-light), var(--paper));
+    border: 1px solid var(--brass);
+    border-radius: 1px;
+    padding: 24px 26px;
+    z-index: 20;
+    transform: translateX(380px);
+    opacity: 0;
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(138, 109, 47, 0.1);
+}
+.starmap-detail.visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+.sm-panel-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 26px;
+    height: 26px;
+    background: none;
+    border: none;
+    color: var(--ink-mute);
+    font-size: 22px;
+    font-family: var(--font-display);
+    cursor: pointer;
+    line-height: 1;
+    z-index: 5;
+}
+.sm-panel-close:hover { color: var(--mars); }
+.sm-panel-ornament {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+    box-shadow: 0 0 10px currentColor;
+}
+.sm-panel-constellation {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 2px 0;
+    border-bottom: 1px solid var(--brass);
+    margin-bottom: 14px;
+}
+.sm-panel-title {
+    font-family: var(--font-display);
+    font-size: 23px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    color: var(--ink);
+}
+.sm-panel-magnitude {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--ink-mute);
+    letter-spacing: 0.3px;
+}
+.sm-panel-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--brass), transparent);
+    margin: 14px 0;
+}
+.sm-panel-desc {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    margin-bottom: 16px;
+}
+.sm-panel-conn-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+}
+.sm-panel-connections {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.sm-connection {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(184, 66, 28, 0.04);
+    border: 1px solid rgba(138, 109, 47, 0.15);
+    border-radius: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.sm-connection:hover {
+    background: rgba(184, 66, 28, 0.1);
+    border-color: var(--brass-light);
+}
+.sm-conn-arrow {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--mars);
+    flex-shrink: 0;
+}
+.sm-conn-type {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    min-width: 70px;
+}
+.sm-conn-node {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-style: italic;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
     .header-nav .nav-btn { padding: 8px 12px; font-size: 12px; }
     .research-sidebar { width: 320px; }
     .feature-panel { width: 280px; }
+    .starmap-detail { width: 280px; }
     .sources-grid { grid-template-columns: 1fr; }
     .masthead-title { font-size: 18px; }
+    .starmap-hints { display: none; }
 }
 @media (max-width: 600px) {
     .header-nav { display: none; }
     .research-sidebar { width: 100%; }
     .research-layout { flex-direction: column; }
     .feature-panel { width: calc(100% - 56px); }
+    .starmap-detail { width: calc(100% - 56px); }
     .research-detail { padding: 24px 28px; }
+    .starmap-legend { max-width: 85%; }
 }

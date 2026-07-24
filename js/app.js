@@ -9,6 +9,7 @@
     let featuresData = [];
     let questionsData = [];
     let currentQuestion = null;
+    let starmapInitialized = false;
 
     // ===== Data sources =====
     const SOURCES = [
@@ -102,6 +103,15 @@
                 document.getElementById(`view-${view}`).classList.add('active');
                 // Resize globe when switching back to explore
                 if (view === 'explore' && window.MarsGlobe) {
+                    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+                }
+                // Initialize starmap on first view
+                if (view === 'starmap') {
+                    if (!starmapInitialized && window.MarsStarmap) {
+                        starmapInitialized = true;
+                        window.MarsStarmap.init('starmap-canvas');
+                        setupStarmapUI();
+                    }
                     setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
                 }
             });
@@ -228,6 +238,26 @@
         });
 
         panel.classList.add('visible');
+    }
+
+    // ===== Starmap UI =====
+    function setupStarmapUI() {
+        // Reset view button
+        const resetBtn = document.getElementById('starmap-reset');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                window.MarsStarmap.resetView();
+            });
+        }
+
+        // Constellation filter legend
+        document.querySelectorAll('.starmap-legend-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.starmap-legend-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                window.MarsStarmap.filterByConstellation(item.dataset.constellation);
+            });
+        });
     }
 
     function renderQuickList(filter = 'all') {

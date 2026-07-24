@@ -40,6 +40,7 @@
         </div>
         <nav class="header-nav">
             <button class="nav-btn active" data-view="explore">Globe</button>
+            <button class="nav-btn" data-view="starmap">Star Atlas</button>
             <button class="nav-btn" data-view="research">Inquiry</button>
             <button class="nav-btn" data-view="timeline">Ephemeris</button>
             <button class="nav-btn" data-view="sources">Sources</button>
@@ -125,6 +126,47 @@
             <div class="feature-quick-list" id="feature-quick-list"></div>
         </section>
 
+        <!-- STARMAP VIEW: Knowledge Graph as a celestial star chart -->
+        <section class="view view-starmap" id="view-starmap">
+            <!-- Star map canvas container -->
+            <div class="starmap-container" id="starmap-canvas"></div>
+
+            <!-- Title overlay — like a chart cartouche -->
+            <div class="starmap-overlay-top">
+                <div class="starmap-info">
+                    <h2 class="starmap-title">Stellarium <span class="latin-name">Martiana</span></h2>
+                    <p class="starmap-subtitle">A knowledge constellation of Mars science · 69 stars · 164 connections</p>
+                </div>
+                <div class="starmap-controls">
+                    <button class="ctrl-btn" id="starmap-reset" title="Reset view">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Constellation filter legend — like a catalogue index -->
+            <div class="starmap-legend">
+                <span class="starmap-legend-label">Constellationes</span>
+                <button class="starmap-legend-item active" data-constellation="all">Omnia</button>
+                <button class="starmap-legend-item" data-constellation="geographia" style="--star-color:#e89a6e">Geographia</button>
+                <button class="starmap-legend-item" data-constellation="missiones" style="--star-color:#c9a84c">Missiones</button>
+                <button class="starmap-legend-item" data-constellation="instrumenta" style="--star-color:#7eb8d6">Instrumenta</button>
+                <button class="starmap-legend-item" data-constellation="scientia" style="--star-color:#d4571e">Scientia</button>
+                <button class="starmap-legend-item" data-constellation="quaestiones" style="--star-color:#b5e8c9">Quaestiones</button>
+            </div>
+
+            <!-- Interaction hints -->
+            <div class="starmap-hints">
+                <span>⟲ Drag to pan</span>
+                <span>⟳ Scroll to zoom</span>
+                <span>◉ Click a star</span>
+                <span>⊕ Double-click to center</span>
+            </div>
+
+            <!-- Detail panel — like a star catalogue entry -->
+            <aside class="starmap-detail" id="starmap-detail"></aside>
+        </section>
+
         <!-- RESEARCH VIEW: AI Questions & Reports — like a scientific journal -->
         <section class="view view-research" id="view-research">
             <div class="research-layout">
@@ -195,6 +237,7 @@
     </script>
     <!-- App scripts -->
     <script type="module" src="js/mars3d.js"></script>
+    <script type="module" src="js/starmap.js"></script>
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
