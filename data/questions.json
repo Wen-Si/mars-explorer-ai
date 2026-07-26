@@ -132,5 +132,19 @@
     "status": "researching",
     "report_ready_date": "2026-07-30",
     "report_file": null
+  },
+  {
+    "id": "Q008",
+    "title": "Do Martian tidal forces from Phobos and Deimos induce cryptic subsurface fluid flow that could concentrate organics and potential biosignatures in specific crustal fractures?",
+    "category": "Geophysics",
+    "rationale": "This question uniquely combines gravitational tidal effects with subsurface hydrology and organic chemistry, a connection rarely explored in Mars research. While tidal forces are known on Earth, their potential role in driving subsurface fluid flow and concentrating organics on Mars has not been investigated, despite Phobos' strong gravitational influence.",
+    "hypothesis": "Tidal stresses from Phobos generate periodic microfracturing and fluid movement in the Martian crust, leading to the preferential accumulation and preservation of organic compounds in specific fracture networks.",
+    "key_data_needed": "High-resolution subsurface radar imaging (like MRO's SHARAD but improved), in-situ seismic monitoring, targeted spectroscopy of fracture walls, and orbital measurements of tidal stress models.",
+    "implications": "Answering this could reveal hidden Martian hydrological systems, identify prime locations for organic preservation, and provide new insights into how tidal forces shape habitable environments on other planetary bodies, revolutionizing our search for subsurface life on Mars.",
+    "asked_date": "2026-07-26",
+    "asked_timestamp": "2026-07-26T08:31:36.116949+00:00",
+    "status": "researching",
+    "report_ready_date": "2026-08-02",
+    "report_file": null
   }
 ]
