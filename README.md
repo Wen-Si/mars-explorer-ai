@@ -5,21 +5,21 @@ An autonomous AI-powered Mars science discovery platform that poses novel scient
 ## Features
 
 - **3D Mars Globe** — High-fidelity interactive Three.js rendering with 30+ named geographical features (volcanoes, canyons, craters, plains, polar caps)
-- **AI Research Engine** — Powered by Zhipu GLM-4.5-Flash, autonomously poses novel Mars science questions every 2 days and generates detailed research reports over a 1-week investigation cycle
+- **AI Research Engine** — Powered by MiniMax M3 (via NVIDIA API), autonomously poses novel Mars science questions every 2 days and generates detailed research reports over a 1-week investigation cycle
 - **Research Log** — Browse all AI-posed questions and their comprehensive scientific reports
 - **Discovery Timeline** — Visual timeline of the AI's ongoing research schedule
 - **Authoritative Sources** — All research is grounded in data from NASA, ESA Mars Express, The Mars Society, and IGG CAS
 
 ## How It Works
 
-1. **Question Generation** — Every 2 days, GLM-4.5-Flash proposes a novel scientific question about Mars that has not been prominently studied
+1. **Question Generation** — Every 2 days, MiniMax M3 proposes a novel scientific question about Mars that has not been prominently studied
 2. **Research Phase** — Over 7 days, the AI investigates the question using data from four authoritative Mars science sources
 3. **Report Publication** — A comprehensive, evidence-based research report is published with methodology, analysis, synthesis, and implications
 
 ## Tech Stack
 
 - **Frontend**: Vanilla HTML/CSS/JS with Three.js for 3D rendering
-- **AI Model**: Zhipu GLM-4.5-Flash
+- **AI Model**: MiniMax M3 (via NVIDIA API)
 - **Automation**: GitHub Actions (daily cron)
 - **Hosting**: GitHub Pages
 
@@ -42,11 +42,11 @@ python3 -m http.server 8000
 
 ## AI Engine Setup
 
-The AI research engine uses the Zhipu GLM-4.5-Flash API. To run it locally:
+The AI research engine uses the MiniMax M3 model via the NVIDIA API. To run it locally:
 
 ```bash
-export GLM_API_KEY="your-api-key"
+export NVIDIA_API_KEY="your-api-key"
 python3 scripts/mars_ai_engine.py data daily
 ```
 
-For GitHub Actions automation, add `GLM_API_KEY` as a repository secret.
+For GitHub Actions automation, add `NVIDIA_API_KEY` as a repository secret.

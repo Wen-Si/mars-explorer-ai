@@ -146,5 +146,19 @@
     "status": "researching",
     "report_ready_date": "2026-08-02",
     "report_file": null
+  },
+  {
+    "id": "Q009",
+    "title": "Does the diurnal thermal cycling of Martian sulfate-rich sedimentary deposits drive quantum tunneling-mediated isotopic fractionation patterns diagnostic of abiotic versus biotic carbon fixation?",
+    "category": "Chemistry",
+    "rationale": "While isotopic fractionation in Martian meteorites and surface samples has been studied, the role of Mars-specific diurnal thermal cycles (due to its ~24-hour rotation and thin atmosphere) in driving quantum tunneling-mediated isotope effects within sulfate-hosted carbonates has not been explored. This bridges geochemistry, quantum-scale physics, and astrobiology in a uniquely Martian context.",
+    "hypothesis": "We hypothesize that the extreme diurnal temperature oscillations experienced by sulfate-rich deposits in regions like Meridiani Planum and Gale Crater drive repeated activation-deactivation cycles that enhance quantum tunneling of lighter isotopes (12C, 16O) during carbonate formation/dissolution reactions, producing isotope fractionation signatures distinct from both equilibrium fractionation and biologically-mediated kinetic effects. Specifically, we predict anomalous 13C/12C ratios in recurring slope lineae-associated carbonates that correlate with diurnal thermal amplitude rather than bulk mineralogy.",
+    "key_data_needed": "High-precision (sub-permil) carbon and oxygen isotopic measurements of carbonate veins in sulfate deposits from Mars rover drill samples (Perseverance, future missions); in-situ temperature logging over diurnal and seasonal cycles; laboratory simulations of Martian diurnal thermal cycling (200K amplitude) on sulfate-carbonate systems with mass spectrometric monitoring; comparison with terrestrial analog sites (Atacama, Antarctica) where similar cycling occurs.",
+    "implications": "Answering this would provide either: (1) a novel abiotic biosignature-mimicking process that must be excluded when interpreting future Mars sample return isotopic data, or (2) a refined isotope framework that strengthens the case for ancient Martian life if anomalous fractionation is absent. It would also establish a new field of planetary quantum geochemistry, applicable to exoplanets with extreme thermal cycling.",
+    "asked_date": "2026-07-26",
+    "asked_timestamp": "2026-07-26T09:17:46.619833+00:00",
+    "status": "researching",
+    "report_ready_date": "2026-08-02",
+    "report_file": null
   }
 ]

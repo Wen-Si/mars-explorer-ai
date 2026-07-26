@@ -426,7 +426,7 @@
                     <div class="report-meta">
                         <span><strong>Asked:</strong> ${q.asked_date}</span>
                         <span><strong>Report:</strong> ${q.report_generated ? q.report_generated.split('T')[0] : ''}</span>
-                        <span><strong>Model:</strong> GLM-4.5-Flash</span>
+                        <span><strong>Model:</strong> MiniMax M3</span>
                     </div>
                     ${reviewBadge}
                 </div>

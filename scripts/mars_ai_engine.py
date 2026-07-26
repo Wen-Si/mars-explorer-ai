@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Mars AI Research Engine
-Generates novel scientific questions about Mars and research reports using GLM-4.5-Flash.
+Generates novel scientific questions about Mars and research reports using MiniMax M3 (via NVIDIA API).
 This script is used both for initial seeding and by GitHub Actions for ongoing generation.
 """
 import json
@@ -12,9 +12,9 @@ import urllib.request
 import urllib.error
 from datetime import datetime, timezone, timedelta
 
-API_KEY = os.environ.get("GLM_API_KEY", "325d6fa364954d2e871c30ba95b553bd.KBdQdqgJgELJBhnv")
-API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
-MODEL = "glm-4.5-flash"
+API_KEY = os.environ.get("NVIDIA_API_KEY", "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")
+API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+MODEL = "minimaxai/minimax-m3"
 
 SOURCES = [
     {"name": "NASA Mars Science", "url": "https://science.nasa.gov/mars/"},
@@ -24,14 +24,15 @@ SOURCES = [
 ]
 
 
-def call_glm(messages, temperature=0.7, max_tokens=4096, retries=3):
-    """Call GLM-4.5-Flash API with retry logic. Thinking mode disabled for direct output."""
+def call_llm(messages, temperature=0.7, max_tokens=4096, retries=3):
+    """Call MiniMax M3 API (via NVIDIA) with retry logic."""
     payload = {
         "model": MODEL,
         "messages": messages,
         "temperature": temperature,
+        "top_p": 0.95,
         "max_tokens": max_tokens,
-        "thinking": {"type": "disabled"},
+        "stream": False,
     }
     data = json.dumps(payload).encode("utf-8")
     last_err = None
@@ -42,6 +43,7 @@ def call_glm(messages, temperature=0.7, max_tokens=4096, retries=3):
             headers={
                 "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json",
+                "Accept": "application/json",
             },
             method="POST",
         )
@@ -61,7 +63,7 @@ def call_glm(messages, temperature=0.7, max_tokens=4096, retries=3):
             print(f"Error on attempt {attempt+1}: {e}", file=sys.stderr)
             last_err = str(e)
         time.sleep(3 * (attempt + 1))
-    raise RuntimeError(f"GLM API failed after {retries} retries: {last_err}")
+    raise RuntimeError(f"LLM API failed after {retries} retries: {last_err}")
 
 
 def parse_json_response(text):
@@ -145,7 +147,7 @@ Return your response as a JSON object with this exact structure:
 
 Return ONLY the JSON object, no other text."""
 
-    response = call_glm(
+    response = call_llm(
         [{"role": "user", "content": prompt}],
         temperature=0.9,
         max_tokens=1024,
@@ -239,7 +241,7 @@ CRITICAL RULES:
 
 Write the report now in Markdown."""
 
-    return call_glm(
+    return call_llm(
         [{"role": "user", "content": prompt}],
         temperature=0.3,
         max_tokens=8192,
@@ -311,7 +313,7 @@ Return your review as a JSON object with this EXACT structure:
 
 Be thorough and specific. List EVERY issue you find, no matter how minor. Return ONLY the JSON object."""
 
-    response = call_glm(
+    response = call_llm(
         [{"role": "user", "content": prompt}],
         temperature=0.2,
         max_tokens=4096,
@@ -372,7 +374,7 @@ CRITICAL REVISION RULES:
 
 Write the COMPLETE revised report now in Markdown."""
 
-    return call_glm(
+    return call_llm(
         [{"role": "user", "content": prompt}],
         temperature=0.3,
         max_tokens=8192,
